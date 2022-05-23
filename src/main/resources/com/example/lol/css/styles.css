@@ -1,0 +1,45 @@
+.background{
+    -fx-background-image: url("../images/login-background.jpg");
+    -fx-background-size: contain;
+}
+
+.login-form{
+    -fx-background-color: #343a40;
+}
+
+.login-label{
+    -fx-text-fill: #ffc107;
+}
+
+.login-fields{
+    -fx-background-color: #091540;
+    -fx-transition: background 2s;
+    -fx-text-fill: #ffc107;
+}
+
+.login-fields:focused{
+    -fx-background-color: #17a2b8;
+}
+
+.btn{
+    -fx-font-weight: 400;
+    -fx-vertical-align: middle;
+    -fx-border-color: transparent;
+    -fx-border-style: solid;
+    -fx-border-size: 1px;
+    -fx-padding: 0.375em 0.75em;
+    -fx-font-size: 1em;
+    -fx-line-height: 1.5;
+    -fx-border-radius: 0.25em;
+}
+
+.btn-dark{
+    -fx-text-fill: #ffc107;
+    -fx-background-color: #091540;
+    -fx-border-color: #091540;
+}
+
+.btn-dark:hover{
+    -fx-background-color: #17a2b8;
+    -fx-border-color: #17a2b8;
+}
