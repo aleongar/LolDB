@@ -137,4 +137,12 @@ CREATE TABLE juega(
 	CONSTRAINT FK_juega_jugador FOREIGN KEY (jugador) REFERENCES jugadores(apodo) ON UPDATE CASCADE ON DELETE NO ACTION,
 	CONSTRAINT FK_juega_partida FOREIGN KEY (partida) REFERENCES partida(id) ON UPDATE CASCADE ON DELETE NO ACTION,
 	CONSTRAINT FK_juega_antitrampa FOREIGN KEY (antitrampa) REFERENCES antitrampas(codigo) ON UPDATE CASCADE ON DELETE NO ACTION
+);
+
+--Añadido para el uso de interfaz gráfica
+
+CREATE TABLE usuarios(
+	username varchar(30),
+	password varchar(64),
+	admin bool DEFAULT false
 )
