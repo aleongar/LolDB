@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lol.LoginController">
+<AnchorPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lol.controllers.LoginController">
    <children>
       <HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" styleClass="background" stylesheets="@../css/styles.css">
          <children>
@@ -39,6 +38,15 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
+                        <Button mnemonicParsing="false" onAction="#signUp" text="Crear cuenta">
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="btn-dark" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets right="30.0" />
+                           </HBox.margin>
+                        </Button>
                         <Button mnemonicParsing="false" onAction="#signIn" text="Inciar Sesión">
                            <styleClass>
                               <String fx:value="btn" />

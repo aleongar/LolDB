@@ -1,4 +1,4 @@
-package com.example.lol;
+package com.example.lol.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

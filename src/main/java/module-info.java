@@ -5,4 +5,6 @@ module com.example.lol {
 
     opens com.example.lol to javafx.fxml;
     exports com.example.lol;
+    exports com.example.lol.controllers;
+    opens com.example.lol.controllers to javafx.fxml;
 }
