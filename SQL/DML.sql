@@ -139,3 +139,10 @@ values
 ('Elyoya', 1, 3),
 ('Elyoya', 3, 4),
 ('Flandre', 2, 5);
+
+--Insert de admin para el uso de la interfaz gráfica
+
+INSERT INTO usuarios
+(username, password, admin)
+values
+('admin', 'c6d46cac670263c0705e16fcab3c8d7194fd576dce99324aa4fe3032e7c5a4a5', true);
