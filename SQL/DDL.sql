@@ -142,7 +142,7 @@ CREATE TABLE juega(
 --Añadido para el uso de interfaz gráfica
 
 CREATE TABLE usuarios(
-	id serial,
+	id serial Primary Key,
 	username varchar(30),
 	password varchar(64),
 	admin bool DEFAULT false

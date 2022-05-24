@@ -1,5 +1,6 @@
 package com.example.lol.controllers;
 
+import com.example.lol.bussiness.DDBB;
 import com.example.lol.models.UserModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
@@ -33,6 +34,7 @@ public class SignupController {
         } else {
             System.out.println(userTextField.getText());
             System.out.println(UserModel.hash(passTextField.getText()));
+            DDBB.signup(userTextField.getText(), UserModel.hash(passTextField.getText()));
         }
     }
 }
