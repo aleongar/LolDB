@@ -1,6 +1,8 @@
 module com.example.lol {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.xml;
+    requires java.sql;
 
 
     opens com.example.lol to javafx.fxml;

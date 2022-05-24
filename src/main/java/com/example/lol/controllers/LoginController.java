@@ -1,8 +1,11 @@
 package com.example.lol.controllers;
 
+import com.example.lol.bussiness.DDBB;
+import com.example.lol.models.UserModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -24,8 +27,16 @@ public class LoginController {
     private PasswordField passTextField;
 
     @FXML
+    private Label warningLabel;
+
+    @FXML
     protected void signIn(){
-        System.out.println(userTextField.getText() + " " + passTextField.getText());
+        boolean state = DDBB.login(userTextField.getText(), UserModel.hash(passTextField.getText()));
+        if(!state){
+            warningLabel.setVisible(true);
+        }else{
+
+        }
     }
 
     @FXML

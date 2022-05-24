@@ -14,7 +14,7 @@
    <children>
       <HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" styleClass="background" stylesheets="@../css/styles.css">
          <children>
-            <VBox maxHeight="300.0" maxWidth="400.0" minHeight="300.0" minWidth="400.0" prefHeight="300.0" prefWidth="400.0" styleClass="login-form">
+            <VBox alignment="CENTER" maxHeight="300.0" maxWidth="400.0" minHeight="300.0" minWidth="400.0" prefHeight="300.0" prefWidth="400.0" styleClass="login-form">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -55,6 +55,7 @@
                         </Button>
                      </children>
                   </HBox>
+                  <Label fx:id="warningLabel" text="Usuario o contraseña incorrecta" textFill="#dc3545" visible="false" />
                </children>
             </VBox>
          </children>
