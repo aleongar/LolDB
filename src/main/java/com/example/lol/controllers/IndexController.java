@@ -2,6 +2,7 @@ package com.example.lol.controllers;
 
 import com.example.lol.bussiness.DDBB;
 import com.example.lol.models.ChampionModel;
+import com.example.lol.models.UserModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,8 +16,11 @@ public class IndexController {
     @FXML
     private Label userLabel;
 
-    public void initialize(String name, int id){
-        userLabel.setText(makeUser(name, id));
+    private UserModel user;
+
+    public void initialize(UserModel user){
+        userLabel.setText(makeUser(user.getUsername(), user.getId()));
+        this.user = user;
     }
 
     private String makeUser(String name, int id){
@@ -30,7 +34,7 @@ public class IndexController {
         Scene scene;
         try {
             scene = new Scene(fxmlLoader.load());
-            ((ChampionsController)fxmlLoader.getController()).initialize(DDBB.getChampionQuery());
+            ((ChampionsController)fxmlLoader.getController()).initialize(DDBB.getChampionQuery(), user.isAdmin());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

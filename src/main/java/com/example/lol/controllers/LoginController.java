@@ -42,11 +42,12 @@ public class LoginController {
         if(id == 0){
             warningLabel.setVisible(true);
         }else{
+            UserModel user = DDBB.userLogged(userTextField.getText(), UserModel.hash(passTextField.getText()));
             FXMLLoader fxmlLoader = new FXMLLoader(IndexController.class.getResource("index-view.fxml"));
             Stage stage = new Stage();
             try {
                 scene = new Scene(fxmlLoader.load());
-                ((IndexController)fxmlLoader.getController()).initialize(userTextField.getText(), id);
+                ((IndexController)fxmlLoader.getController()).initialize(user);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

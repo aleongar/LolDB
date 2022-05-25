@@ -6,9 +6,25 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class UserModel {
+    private int id;
     private String username;
     private String password;
     private boolean admin;
+
+    public UserModel(int id, String username, String password, boolean admin) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.admin = admin;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
