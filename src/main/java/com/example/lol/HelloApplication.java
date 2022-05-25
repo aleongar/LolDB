@@ -16,7 +16,10 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Login");
         stage.setScene(scene);
+        ((LoginController)fxmlLoader.getController()).setActualStage(stage);
         stage.show();
+        stage.setIconified(false);
+        stage.requestFocus();
     }
 
     public static void main(String[] args) {
