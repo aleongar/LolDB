@@ -99,3 +99,14 @@
 .button-items:hover .index-label{
     -fx-text-fill: #ffc107;
 }
+
+.background-champions{
+    -fx-background-image: url("../images/champions-background.jpg");
+    -fx-background-size: contain;
+}
+
+.image-border{
+    -fx-border-style: solid;
+    -fx-border-width: 3px;
+    -fx-border-color: rgb(76, 81, 43);
+}

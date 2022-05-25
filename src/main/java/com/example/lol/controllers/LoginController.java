@@ -16,9 +16,11 @@ public class LoginController {
     private Scene scene;
     private Stage actualStage;
     private Stage signUpStage;
+    private Stage resetPasswordStage;
 
     public void initialize(){
         signUpStage = new Stage();
+        resetPasswordStage = new Stage();
     }
 
     public void setActualStage(Stage actualStage) {
@@ -70,5 +72,21 @@ public class LoginController {
             signUpStage.show();
         signUpStage.setIconified(false);
         signUpStage.requestFocus();
+    }
+
+    @FXML
+    protected void passReset(){
+        FXMLLoader fxmlLoader = new FXMLLoader(ResetPassController.class.getResource("reset-pass-view.fxml"));
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        resetPasswordStage.setTitle("Cambiar contraseña");
+        resetPasswordStage.setScene(scene);
+        if(!resetPasswordStage.isShowing())
+            resetPasswordStage.show();
+        resetPasswordStage.setIconified(false);
+        resetPasswordStage.requestFocus();
     }
 }
