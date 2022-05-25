@@ -6,9 +6,9 @@ import java.util.ArrayList;
 public class DDBB {
     private static Connection connection;
     private static Statement query;
-    private static final String URL = "jdbc:postgresql://localhost:5432/LoL?user=postgres&password=1234";
+    private static final String URL = "jdbc:postgresql://192.168.1.74:5432/LoL?user=postgres&password=1234";
 
-    public static boolean login(String user, String password){
+    public static int login(String user, String password){
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL);
@@ -16,7 +16,7 @@ public class DDBB {
             String sql  = "SELECT id FROM usuarios WHERE username = '"+user+"' AND password = '"+ password+"'";
             ResultSet result = query.executeQuery(sql);
             result.next();
-            return result.getInt(1) > 0 ? true : false;
+            return result.getInt(1);
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -31,7 +31,7 @@ public class DDBB {
                 System.err.println("No se ha podido cerrar la conexion");
             }
         }
-        return false;
+        return 0;
     }
 
     public static void signup(String user, String password){
@@ -42,8 +42,7 @@ public class DDBB {
             String sql  = "INSERT INTO usuarios (username, password) values ('" + user + "', '" + password + "')";
             query.executeQuery(sql);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            System.err.println("No se han podido obtener datos");
+            System.err.println();
         } catch (ClassNotFoundException e) {
             System.err.println("No se ha podido establecer la conexion");
         }
@@ -67,12 +66,7 @@ public class DDBB {
             while (result.next()) {
                 ArrayList<String> user = new ArrayList<>();
                 user.add(Integer.toString(result.getInt(1)));
-                user.add(result.getString(2));
-                user.add(result.getString(3));
-                user.add(result.getString(4));
-                user.add(Integer.toString(result.getInt(5)));
-                user.add(result.getString(6));
-                user.add(result.getString(7));
+
                 datos.add(user);
             }
             for (ArrayList<String> array : datos) {

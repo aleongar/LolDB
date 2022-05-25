@@ -14,10 +14,15 @@ import java.io.IOException;
 
 public class LoginController {
     private Scene scene;
+    private Stage actualStage;
     private Stage signUpStage;
 
     public void initialize(){
         signUpStage = new Stage();
+    }
+
+    public void setActualStage(Stage actualStage) {
+        this.actualStage = actualStage;
     }
 
     @FXML
@@ -31,11 +36,22 @@ public class LoginController {
 
     @FXML
     protected void signIn(){
-        boolean state = DDBB.login(userTextField.getText(), UserModel.hash(passTextField.getText()));
-        if(!state){
+        int id = DDBB.login(userTextField.getText(), UserModel.hash(passTextField.getText()));
+        if(id == 0){
             warningLabel.setVisible(true);
         }else{
-
+            FXMLLoader fxmlLoader = new FXMLLoader(IndexController.class.getResource("index-view.fxml"));
+            Stage stage = new Stage();
+            try {
+                scene = new Scene(fxmlLoader.load());
+                ((IndexController)fxmlLoader.getController()).initialize(userTextField.getText(), id);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            stage.setTitle("Index");
+            stage.setScene(scene);
+            stage.show();
+            actualStage.close();
         }
     }
 

@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lol.controllers.SignupController">
+<AnchorPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" styleClass="background" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lol.controllers.SignupController">
    <children>
-      <HBox alignment="CENTER" maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" styleClass="background">
+      <HBox alignment="CENTER" maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" >
          <children>
             <VBox maxHeight="300.0" maxWidth="400.0" minHeight="300.0" minWidth="400.0" prefHeight="300.0" prefWidth="400.0" styleClass="login-form">
                <children>
