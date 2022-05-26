@@ -51,9 +51,7 @@ public class ChampionsController {
     @FXML
     private CheckBox editionCheck;
 
-
-
-
+    private boolean editing;
     private ResultSet result;
     private ChampionModel champ;
     private ChampionModel oldChamp;
@@ -64,6 +62,7 @@ public class ChampionsController {
     public void initialize(ResultSet result, boolean admin){
         this.result = result;
         this.admin = admin;
+        editing = false;
         try {
             result.next();
             champ = new ChampionModel(result.getString(1),
@@ -90,6 +89,7 @@ public class ChampionsController {
 
     @FXML
     private void enableEditionAbility(){
+        editing = editionCheck.isSelected();
         abQTextField.setEditable(editionCheck.isSelected());
         abWTextField.setEditable(editionCheck.isSelected());
         abETextField.setEditable(editionCheck.isSelected());
@@ -118,20 +118,23 @@ public class ChampionsController {
     protected void nextChamp(){
         if(admin)
             checkModifed();
-        try {
-            result.setFetchDirection(ResultSet.FETCH_FORWARD);
-            result.next();
-            champ = new ChampionModel(result.getString(1),
-                result.getString(2), result.getString(3));
-            if(admin)
-                oldChamp = new ChampionModel(result.getString(1),
-                    result.getString(2), result.getString(3));
-            if(result.getRow() == rows)
-                nextButton.setDisable(true);
-            prevButton.setDisable(false);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if(!editing) {
+            try {
+                result.setFetchDirection(ResultSet.FETCH_FORWARD);
+                result.next();
+                champ = new ChampionModel(result.getString(1),
+                        result.getString(2), result.getString(3));
+                if (admin)
+                    oldChamp = new ChampionModel(result.getString(1),
+                            result.getString(2), result.getString(3));
+                if (result.getRow() == rows)
+                    nextButton.setDisable(true);
+                prevButton.setDisable(false);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
+        editing = false;
         nameTextField.setText(champ.getName());
         dmgTextField.setText(champ.getDano());
         abQTextField.setText(champ.getHabilidades()[0]);
@@ -144,20 +147,23 @@ public class ChampionsController {
     protected void prevChamp(){
         if (admin)
             checkModifed();
-        try {
-            result.setFetchDirection(ResultSet.FETCH_REVERSE);
-            result.previous();
-            champ = new ChampionModel(result.getString(1),
-                result.getString(2), result.getString(3));
-            if(admin)
-                oldChamp = new ChampionModel(result.getString(1),
-                    result.getString(2), result.getString(3));
-            if(result.getRow() == 1)
-                prevButton.setDisable(true);
-            nextButton.setDisable(false);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if(!editing) {
+            try {
+                result.setFetchDirection(ResultSet.FETCH_REVERSE);
+                result.previous();
+                champ = new ChampionModel(result.getString(1),
+                        result.getString(2), result.getString(3));
+                if (admin)
+                    oldChamp = new ChampionModel(result.getString(1),
+                            result.getString(2), result.getString(3));
+                if (result.getRow() == 1)
+                    prevButton.setDisable(true);
+                nextButton.setDisable(false);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
+        editing = false;
         nameTextField.setText(champ.getName());
         dmgTextField.setText(champ.getDano());
         abQTextField.setText(champ.getHabilidades()[0]);
@@ -174,12 +180,21 @@ public class ChampionsController {
             DDBB.updateChamps(abQTextField.getText(), abWTextField.getText(),
                     abETextField.getText(), abRTextField.getText(), nameTextField.getText());
             try {
-               int actualRow = result.getRow();
                result = DDBB.getChampionQuery();
-               result.absolute(actualRow);
+               result.last();
+               nextButton.setDisable(true);
+               prevButton.setDisable(false);
+                champ = new ChampionModel(result.getString(1),
+                        result.getString(2), result.getString(3));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            nameTextField.setText(champ.getName());
+            dmgTextField.setText(champ.getDano());
+            abQTextField.setText(champ.getHabilidades()[0]);
+            abWTextField.setText(champ.getHabilidades()[1]);
+            abETextField.setText(champ.getHabilidades()[2]);
+            abRTextField.setText(champ.getHabilidades()[3]);
         }
     }
     @FXML

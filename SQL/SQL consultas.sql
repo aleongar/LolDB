@@ -116,3 +116,8 @@ UPDATE conseguir
 SET minuto = 24
 WHERE partida = 4 
 AND objetivo = (SELECT id FROM objetivo WHERE nombre = 'Dragón de Océano')
+
+
+--Consultas adicionales (utilizadas para las funciones de java)
+
+SELECT ultima_version, a.*, i.campeon, j.equipo from (SELECT apodo, max(maestria) from info_jugadores_maestria group by apodo) a, info_jugadores_maestria i, jugadores j WHERE a.max = i.maestria AND j.apodo = a.apodo
