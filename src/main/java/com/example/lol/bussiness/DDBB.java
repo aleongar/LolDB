@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class DDBB {
     private static Connection connection;
     private static Statement query;
-    private static final String URL = "jdbc:postgresql://10.2.135.119:5432/LoL?user=postgres&password=1234";
+    private static final String URL = "jdbc:postgresql://192.168.1.74:5432/LoL?user=postgres&password=1234";
 
     public static int login(String user, String password){
         try {
@@ -88,7 +88,7 @@ public class DDBB {
         try {
             connection = DriverManager.getConnection(URL);
             query = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            String sql  = "SELECT * FROM campeones ORDER BY nombre";
+            String sql  = "SELECT * FROM campeones";
             ResultSet result = query.executeQuery(sql);
             return result;
         } catch (SQLException e) {
@@ -166,15 +166,41 @@ public class DDBB {
         return 0;
     }
 
-    public static void updateChamps(String q, String w, String e, String r){
+    public static void updateChamps(String q, String w, String e, String r, String campeon){
         try {
+            System.out.println("Si lees esto, es porque se está modificando los campeones");
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL);
             query = connection.createStatement();
-            String sql  = "UPDATE campeones SET habilidades = '" + q + ", " + w + ", " + e + ", " + r + "'";
+            String sql  = "UPDATE campeones SET habilidades = '" + q + ", " + w + ", " + e +
+                    ", " + r + "' WHERE nombre = '" + campeon + "'";
             ResultSet result = query.executeQuery(sql);
             result.next();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            System.err.println("No se han podido obtener datos");
+        } catch (ClassNotFoundException ex) {
+            System.err.println("No se ha podido establecer la conexion");
+        }
+        finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                System.err.println("No se ha podido cerrar la conexion");
+            }
+        }
+    }
 
+    public static void insertChamp(String nombre, String q, String w, String e, String r, String dano){
+        try {
+            System.out.println("Si lees esto, es porque se está insertando los campeones");
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL);
+            query = connection.createStatement();
+            String sql  = "INSERT INTO campeones VALUES ('"+ nombre + "', '" + q + ", " + w + ", " + e +
+                    ", " + r + "', '" + dano +"')";
+            ResultSet result = query.executeQuery(sql);
+            result.next();
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
             System.err.println("No se han podido obtener datos");

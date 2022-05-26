@@ -39,7 +39,7 @@ public class IndexController {
             throw new RuntimeException(e);
         }
         Stage stage = new Stage();
-        stage.setTitle("SignUp");
+        stage.setTitle("Champs");
         stage.setScene(scene);
         if(!stage.isShowing())
             stage.show();

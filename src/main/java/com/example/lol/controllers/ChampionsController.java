@@ -4,6 +4,7 @@ import com.example.lol.bussiness.DDBB;
 import com.example.lol.models.ChampionModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
@@ -36,7 +37,22 @@ public class ChampionsController {
     private Button prevButton;
 
     @FXML
+    private Button newButton;
+
+    @FXML
+    private Button insertButton;
+
+    @FXML
+    private Button cancelButton;
+
+    @FXML
     private ImageView championImage;
+
+    @FXML
+    private CheckBox editionCheck;
+
+
+
 
     private ResultSet result;
     private ChampionModel champ;
@@ -53,9 +69,10 @@ public class ChampionsController {
             champ = new ChampionModel(result.getString(1),
                 result.getString(2), result.getString(3));
             if(admin) {
-                enableEdition();
+                editionCheck.setVisible(true);
                 oldChamp = new ChampionModel(result.getString(1),
                     result.getString(2), result.getString(3));
+                newButton.setVisible(true);
             }
         } catch (SQLException e) {
             System.err.println("La consulta no devolvió nada");
@@ -71,16 +88,36 @@ public class ChampionsController {
         prevButton.setDisable(true);
     }
 
+    @FXML
+    private void enableEditionAbility(){
+        abQTextField.setEditable(editionCheck.isSelected());
+        abWTextField.setEditable(editionCheck.isSelected());
+        abETextField.setEditable(editionCheck.isSelected());
+        abRTextField.setEditable(editionCheck.isSelected());
+    }
 
-    private void enableEdition(){
-        abQTextField.setEditable(true);
-        abWTextField.setEditable(true);
-        abETextField.setEditable(true);
-        abRTextField.setEditable(true);
+    private void changeEdition(boolean state){
+        nameTextField.setEditable(state);
+        dmgTextField.setEditable(state);
+        abQTextField.setEditable(state);
+        abWTextField.setEditable(state);
+        abETextField.setEditable(state);
+        abRTextField.setEditable(state);
+    }
+
+    private void clear(){
+        nameTextField.clear();
+        dmgTextField.clear();
+        abQTextField.clear();
+        abWTextField.clear();
+        abETextField.clear();
+        abRTextField.clear();
     }
 
     @FXML
     protected void nextChamp(){
+        if(admin)
+            checkModifed();
         try {
             result.setFetchDirection(ResultSet.FETCH_FORWARD);
             result.next();
@@ -105,6 +142,8 @@ public class ChampionsController {
 
     @FXML
     protected void prevChamp(){
+        if (admin)
+            checkModifed();
         try {
             result.setFetchDirection(ResultSet.FETCH_REVERSE);
             result.previous();
@@ -128,9 +167,73 @@ public class ChampionsController {
     }
 
     private void checkModifed(){
-        if(!champ.equals(oldChamp)){
-
+        if(abQTextField.getText().compareTo(oldChamp.getHabilidades()[0]) != 0 ||
+                abWTextField.getText().compareTo(oldChamp.getHabilidades()[1]) != 0 ||
+                abETextField.getText().compareTo(oldChamp.getHabilidades()[2]) != 0 ||
+                abRTextField.getText().compareTo(oldChamp.getHabilidades()[3]) != 0 ){
+            DDBB.updateChamps(abQTextField.getText(), abWTextField.getText(),
+                    abETextField.getText(), abRTextField.getText(), nameTextField.getText());
+            try {
+               int actualRow = result.getRow();
+               result = DDBB.getChampionQuery();
+               result.absolute(actualRow);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
+    @FXML
+    private void newChamp(){
+        changeEdition(true);
+        clear();
+        newButton.setDisable(true);
+        insertButton.setVisible(true);
+        cancelButton.setVisible(true);
+        prevButton.setDisable(true);
+        nextButton.setDisable(true);
+        editionCheck.setSelected(false);
+        editionCheck.setDisable(true);
+    }
 
+    @FXML
+    private void insertChamp(){
+        DDBB.insertChamp(nameTextField.getText(), abQTextField.getText(), abWTextField.getText(),
+                abETextField.getText(), abRTextField.getText(), dmgTextField.getText());
+        newButton.setDisable(false);
+        insertButton.setVisible(false);
+        changeEdition(false);
+        try {
+            result = DDBB.getChampionQuery();
+            result.last();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        prevButton.setDisable(false);
+        rows = DDBB.getChampionsCount();
+    }
+
+    @FXML
+    private void cancelInsert(){
+        newButton.setDisable(false);
+        cancelButton.setVisible(false);
+        insertButton.setVisible(false);
+        nextButton.setDisable(false);
+        changeEdition(false);
+        editionCheck.setDisable(false);
+        try {
+            result.first();
+            champ = new ChampionModel(result.getString(1),
+                    result.getString(2), result.getString(3));
+            oldChamp = new ChampionModel(result.getString(1),
+                    result.getString(2), result.getString(3));
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        nameTextField.setText(champ.getName());
+        dmgTextField.setText(champ.getDano());
+        abQTextField.setText(champ.getHabilidades()[0]);
+        abWTextField.setText(champ.getHabilidades()[1]);
+        abETextField.setText(champ.getHabilidades()[2]);
+        abRTextField.setText(champ.getHabilidades()[3]);
+    }
 }
