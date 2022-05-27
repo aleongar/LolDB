@@ -120,4 +120,6 @@ AND objetivo = (SELECT id FROM objetivo WHERE nombre = 'Dragón de Océano')
 
 --Consultas adicionales (utilizadas para las funciones de java)
 
-SELECT ultima_version, a.*, i.campeon, j.equipo from (SELECT apodo, max(maestria) from info_jugadores_maestria group by apodo) a, info_jugadores_maestria i, jugadores j WHERE a.max = i.maestria AND j.apodo = a.apodo
+SELECT ultima_version, a.*, i.campeon, j.equipo, j.nombre, j.apellido, j.nacionalidad from (SELECT apodo, max(maestria) from info_jugadores_maestria group by apodo) a, info_jugadores_maestria i, jugadores j WHERE a.max = i.maestria AND j.apodo = a.apodo
+
+SELECT last_version() ,a.*,  d.campeon, j.nombre, j.apellido, j.equipo, j.nacionalidad FROM (SELECT max(d.maestria), d.jugador FROM dominar d GROUP BY d.jugador) a, dominar d, jugadores j WHERE a.max = d.maestria AND a.jugador = j.apodo

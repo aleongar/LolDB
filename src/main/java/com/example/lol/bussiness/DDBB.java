@@ -1,4 +1,5 @@
 package com.example.lol.bussiness;
+import com.example.lol.models.PlayerModel;
 import com.example.lol.models.UserModel;
 
 import javax.xml.transform.Result;
@@ -214,6 +215,70 @@ public class DDBB {
                 System.err.println("No se ha podido cerrar la conexion");
             }
         }
+    }
+
+    public static ArrayList<PlayerModel> getNewerPlayersView(){
+        ArrayList<PlayerModel> arrayList = new ArrayList<>();
+        try {
+            System.out.println("Si lees esto, es porque se está insertando los campeones");
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL);
+            query = connection.createStatement();
+            String sql = "SELECT last_version() ,a.max, a.jugador,  d.campeon, j.nombre, j.apellido, j.equipo, j.nacionalidad FROM (SELECT max(d.maestria), d.jugador FROM dominar d GROUP BY d.jugador)" +
+                    " a, dominar d, jugadores j WHERE a.max = d.maestria AND a.jugador = j.apodo";
+            ResultSet result = query.executeQuery(sql);
+            while(result.next()){
+                arrayList.add(new PlayerModel(result.getString(1), result.getInt(2),
+                        result.getString(3), result.getString(4), result.getString(5),
+                        result.getString(6), result.getString(7), result.getString(8)));
+            }
+            return arrayList;
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            System.err.println("No se han podido obtener datos");
+        } catch (ClassNotFoundException ex) {
+            System.err.println("No se ha podido establecer la conexion");
+        }
+        finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                System.err.println("No se ha podido cerrar la conexion");
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<PlayerModel> getOlderPlayer(){
+        ArrayList<PlayerModel> arrayList = new ArrayList<>();
+        try {
+            System.out.println("Si lees esto, es porque se está insertando los campeones");
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL);
+            query = connection.createStatement();
+            String sql = "SELECT last_version() ,a.*,  d.campeon, j.nombre, j.apellido, j.equipo, j.nacionalidad FROM (SELECT max(d.maestria), d.jugador FROM dominar d GROUP BY d.jugador) a," +
+            " dominar d, jugadores j WHERE a.max = d.maestria AND a.jugador = j.apodo";
+            ResultSet result = query.executeQuery(sql);
+            while(result.next()){
+                arrayList.add(new PlayerModel(result.getString(1), result.getInt(2),
+                        result.getString(3), result.getString(4), result.getString(5),
+                        result.getString(6), result.getString(7), result.getString(8)));
+            }
+            return arrayList;
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            System.err.println("No se han podido obtener datos");
+        } catch (ClassNotFoundException ex) {
+            System.err.println("No se ha podido establecer la conexion");
+        }
+        finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                System.err.println("No se ha podido cerrar la conexion");
+            }
+        }
+        return null;
     }
 
 

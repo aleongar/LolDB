@@ -50,6 +50,21 @@ public class IndexController {
     @FXML
     protected void openProplayersView(){
         System.out.println("Faker what was that");
+        FXMLLoader fxmlLoader = new FXMLLoader(PlayersController.class.getResource("players-view.fxml"));
+        Scene scene;
+        try {
+            scene = new Scene(fxmlLoader.load());
+            ((PlayersController)fxmlLoader.getController()).initialize(user.isAdmin());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Players");
+        stage.setScene(scene);
+        if(!stage.isShowing())
+            stage.show();
+        stage.setIconified(false);
+        stage.requestFocus();
     }
     @FXML
     protected void openTeamsView(){
