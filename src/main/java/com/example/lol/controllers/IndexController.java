@@ -17,10 +17,16 @@ public class IndexController {
     private Label userLabel;
 
     private UserModel user;
+    private Stage actualStage;
+    private Stage championsStage;
+    private Stage playerStage;
 
-    public void initialize(UserModel user){
+    public void initialize(UserModel user, Stage actualStage){
         userLabel.setText(makeUser(user.getUsername(), user.getId()));
         this.user = user;
+        this.actualStage = actualStage;
+        championsStage = new Stage();
+        playerStage = new Stage();
     }
 
     private String makeUser(String name, int id){
@@ -38,13 +44,12 @@ public class IndexController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Stage stage = new Stage();
-        stage.setTitle("Champs");
-        stage.setScene(scene);
-        if(!stage.isShowing())
-            stage.show();
-        stage.setIconified(false);
-        stage.requestFocus();
+        championsStage.setTitle("Champs");
+        championsStage.setScene(scene);
+        if(!championsStage.isShowing())
+            championsStage.show();
+        championsStage.setIconified(false);
+        championsStage.requestFocus();
     }
 
     @FXML
@@ -58,13 +63,12 @@ public class IndexController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Stage stage = new Stage();
-        stage.setTitle("Players");
-        stage.setScene(scene);
-        if(!stage.isShowing())
-            stage.show();
-        stage.setIconified(false);
-        stage.requestFocus();
+        playerStage.setTitle("Players");
+        playerStage.setScene(scene);
+        if(!playerStage.isShowing())
+            playerStage.show();
+        playerStage.setIconified(false);
+        playerStage.requestFocus();
     }
     @FXML
     protected void openTeamsView(){
@@ -74,5 +78,29 @@ public class IndexController {
     @FXML
     protected void openItemsView(){
         System.out.println("Sinceramente me parecen una mierda los de ahora pero tengo que vivir con ello");
+    }
+
+    @FXML
+    protected void signOut(){
+        System.out.println("Cerrando sesión");
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("login-view.fxml"));
+        Scene scene;
+        Stage stage = new Stage();
+        try {
+            scene = new Scene(fxmlLoader.load());
+            ((LoginController)fxmlLoader.getController()).setActualStage(stage);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        stage.setTitle("Login");
+        stage.setScene(scene);
+        if(!stage.isShowing())
+            stage.show();
+        stage.setIconified(false);
+        stage.requestFocus();
+        championsStage.close();
+        playerStage.close();
+        actualStage.close();
     }
 }

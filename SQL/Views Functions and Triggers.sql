@@ -160,6 +160,27 @@ $$ LANGUAGE PLPGSQL;
 --Test
 select contar_habilidades('Pleno de 5 puntas, Velo, Voltereta Shuriken, Ejecución Perfecta') --devuelve 4
 
+--Funcion 6
+--Funcion que devuelve el mejor campeón de un jugador con su puntuación maestría, en caso de no existir devuelve 0
+CREATE OR REPLACE FUNCTION obtener_mejor_campeon(varchar(30))
+RETURNS table(
+    maestria_R numeric(8),
+    campeon_R varchar(30)
+) as $$
+BEGIN
+    SELECT a.max, d.campeon INTO STRICT maestria_R ,campeon_R FROM (SELECT max(maestria) FROM dominar WHERE jugador = $1) a,
+                                  dominar d WHERE a.max = maestria and d.jugador = $1;
+    RETURN NEXT;
+    EXCEPTION
+        WHEN no_data_found THEN
+             SELECT 0, ' ' into maestria_R, campeon_R;
+             RETURN NEXT;
+END;
+$$ language plpgsql
+
+--Ejemplo
+SELECT * FROM obtener_mejor_campeon('Faker')
+
 -----------------------------------
 
 --Trigger 1
@@ -299,32 +320,19 @@ RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO objetivo
     values
-    (NEW.id, TG_TABLE_NAME, TG_TABLE_NAME);
+    (NEW.id, 'Dragon de ' || NEW.elemento, NEW.alma);
     RAISE INFO 'Id reservado en la tabla objetivos';
+    RETURN NEW;
 END;
 $$ LANGUAGE PLPGSQL;
 
-CREATE TRIGGER actualizar_objetivos_trigger
-AFTER INSERT
+CREATE OR REPLACE TRIGGER actualizar_objetivos_trigger
+BEFORE INSERT
 ON dragones
 FOR EACH ROW
 EXECUTE PROCEDURE actualizar_objetivos();
 
-CREATE TRIGGER actualizar_objetivos_trigger
-AFTER INSERT
-ON torretas
-FOR EACH ROW
-EXECUTE PROCEDURE actualizar_objetivos();
-
-CREATE TRIGGER actualizar_objetivos_trigger
-AFTER INSERT
-ON heraldo
-FOR EACH ROW
-EXECUTE PROCEDURE actualizar_objetivos();
-
-CREATE TRIGGER actualizar_objetivos_trigger
-AFTER INSERT
-ON inhibidores
-FOR EACH ROW
-EXECUTE PROCEDURE actualizar_objetivos();
-
+--Ejemplo
+INSERT into DRAGONES
+values
+(99, 'Revive temporalmente', 'Veneno')

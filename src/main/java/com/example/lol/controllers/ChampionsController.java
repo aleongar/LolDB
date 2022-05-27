@@ -216,6 +216,7 @@ public class ChampionsController {
                 abETextField.getText(), abRTextField.getText(), dmgTextField.getText());
         newButton.setDisable(false);
         insertButton.setVisible(false);
+        cancelButton.setVisible(false);
         changeEdition(false);
         try {
             result = DDBB.getChampionQuery();
@@ -250,5 +251,6 @@ public class ChampionsController {
         abWTextField.setText(champ.getHabilidades()[1]);
         abETextField.setText(champ.getHabilidades()[2]);
         abRTextField.setText(champ.getHabilidades()[3]);
+        prevButton.setDisable(true);
     }
 }

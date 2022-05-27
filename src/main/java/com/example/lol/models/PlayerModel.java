@@ -3,14 +3,14 @@ package com.example.lol.models;
 public class PlayerModel{
     private String version;
     private String username;
-    private int mastery;
+    private String mastery;
     private String bestChamp;
     private String team;
     private String name;
     private String surname;
     private String nationality;
 
-    public PlayerModel(String version, int mastery, String username, String bestChamp, String team, String name, String surname, String nationality) {
+    public PlayerModel(String version, String mastery, String username, String bestChamp, String name, String surname, String team, String nationality) {
         this.version = version;
         this.mastery = mastery;
         this.username = username;
@@ -37,11 +37,11 @@ public class PlayerModel{
         this.username = username;
     }
 
-    public int getMastery() {
+    public String getMastery() {
         return mastery;
     }
 
-    public void setMastery(int mastery) {
+    public void setMastery(String mastery) {
         this.mastery = mastery;
     }
 

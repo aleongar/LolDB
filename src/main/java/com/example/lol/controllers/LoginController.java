@@ -47,7 +47,7 @@ public class LoginController {
             Stage stage = new Stage();
             try {
                 scene = new Scene(fxmlLoader.load());
-                ((IndexController)fxmlLoader.getController()).initialize(user);
+                ((IndexController)fxmlLoader.getController()).initialize(user, stage);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

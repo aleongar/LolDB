@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class DDBB {
     private static Connection connection;
     private static Statement query;
-    private static final String URL = "jdbc:postgresql://localhost:5432/LoL?user=postgres&password=1234";
+    private static final String URL = "jdbc:postgresql://192.168.1.74:5432/LoL?user=postgres&password=1234";
 
     public static int login(String user, String password){
         try {
@@ -220,17 +220,20 @@ public class DDBB {
     public static ArrayList<PlayerModel> getNewerPlayersView(){
         ArrayList<PlayerModel> arrayList = new ArrayList<>();
         try {
-            System.out.println("Si lees esto, es porque se está insertando los campeones");
+            System.out.println("Si lees esto, es porque se está obteniendo la lista de la versión actual");
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL);
             query = connection.createStatement();
-            String sql = "SELECT last_version() ,a.max, a.jugador,  d.campeon, j.nombre, j.apellido, j.equipo, j.nacionalidad FROM (SELECT max(d.maestria), d.jugador FROM dominar d GROUP BY d.jugador)" +
-                    " a, dominar d, jugadores j WHERE a.max = d.maestria AND a.jugador = j.apodo";
+            String sql = "SELECT last_version() ,j.* FROM jugadores j";
             ResultSet result = query.executeQuery(sql);
             while(result.next()){
-                arrayList.add(new PlayerModel(result.getString(1), result.getInt(2),
-                        result.getString(3), result.getString(4), result.getString(5),
-                        result.getString(6), result.getString(7), result.getString(8)));
+                String sql2 = "SELECT * from obtener_mejor_campeon('" + result.getString(2) + "')";
+                Statement query2 = connection.createStatement();
+                ResultSet result2 = query2.executeQuery(sql2);
+                result2.next();
+                arrayList.add(new PlayerModel(result.getString(1), result2.getString(1),
+                        result.getString(2), result2.getString(2), result.getString(3),
+                        result.getString(4), result.getString(6), result.getString(5)));
             }
             return arrayList;
         } catch (SQLException ex) {
@@ -252,17 +255,18 @@ public class DDBB {
     public static ArrayList<PlayerModel> getOlderPlayer(){
         ArrayList<PlayerModel> arrayList = new ArrayList<>();
         try {
-            System.out.println("Si lees esto, es porque se está insertando los campeones");
+            System.out.println("Si lees esto, es porque se está obteniendo la lista de la versión antigua");
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL);
             query = connection.createStatement();
-            String sql = "SELECT last_version() ,a.*,  d.campeon, j.nombre, j.apellido, j.equipo, j.nacionalidad FROM (SELECT max(d.maestria), d.jugador FROM dominar d GROUP BY d.jugador) a," +
-            " dominar d, jugadores j WHERE a.max = d.maestria AND a.jugador = j.apodo";
+            String sql = "SELECT ultima_version, a.*, i.campeon, j.equipo, j.nombre, j.apellido, j.nacionalidad " +
+                    "from (SELECT apodo, max(maestria) from info_jugadores_maestria group by apodo) a," +
+                    " info_jugadores_maestria i, jugadores j WHERE a.max = i.maestria AND j.apodo = a.apodo";
             ResultSet result = query.executeQuery(sql);
             while(result.next()){
-                arrayList.add(new PlayerModel(result.getString(1), result.getInt(2),
-                        result.getString(3), result.getString(4), result.getString(5),
-                        result.getString(6), result.getString(7), result.getString(8)));
+                arrayList.add(new PlayerModel(result.getString(1), result.getString(3),
+                        result.getString(2), result.getString(4), result.getString(6),
+                        result.getString(7), result.getString(5), result.getString(8)));
             }
             return arrayList;
         } catch (SQLException ex) {
@@ -280,6 +284,57 @@ public class DDBB {
         }
         return null;
     }
+    public static String insertPlayer(String name, String surname, String username, String team,
+                                      String mastery, String bestChamp){
+        try {
+            System.out.println("Si lees esto, es porque se está insertando los jugadores");
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL);
+            query = connection.createStatement();
+            String sql  = "INSERT INTO jugadores (nombre, apellido, apodo, equipo) VALUES ('" + name + "', '" + surname +
+                    "', '" + username + "', '" + team + "')";
+            query.execute(sql);
+            sql = "INSERT INTO dominar values ('" + username + "', '" + bestChamp + "', " + mastery + ")";
+            query.execute(sql);
+            return "Jugador añadido";
+        } catch (SQLException e) {
+            System.err.println("No se han podido obtener datos");
+            return e.getMessage();
+        } catch (ClassNotFoundException e) {
+            System.err.println("No se ha podido establecer la conexion");
+        }
+        finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                System.err.println("No se ha podido cerrar la conexion");
+            }
+        }
+        return "Fallo en la base de datos";
+    }
 
-
+    public static void deletePlayer(String username){
+        try {
+            System.out.println("Si lees esto, es porque se está eliminando los jugadores");
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL);
+            query = connection.createStatement();
+            String sql  = "DELETE FROM dominar WHERE jugador = '" + username +"'";
+            query.execute(sql);
+            sql = "DELETE FROM jugadores WHERE apodo = '" + username +"'";
+            query.execute(sql);
+        } catch (SQLException e) {
+            System.err.println("No se han podido obtener datos");
+            System.err.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.err.println("No se ha podido establecer la conexion");
+        }
+        finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                System.err.println("No se ha podido cerrar la conexion");
+            }
+        }
+    }
 }
