@@ -47,7 +47,7 @@
                               <Insets right="30.0" />
                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#signIn" text="Inciar Sesión">
+                        <Button defaultButton="true" mnemonicParsing="false" onAction="#signIn" text="Inciar Sesión">
                            <styleClass>
                               <String fx:value="btn" />
                               <String fx:value="btn-dark" />

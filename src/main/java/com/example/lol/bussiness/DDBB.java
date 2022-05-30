@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class DDBB {
     private static Connection connection;
     private static Statement query;
-    private static final String URL = "jdbc:postgresql://192.168.1.74:5432/LoL?user=postgres&password=1234";
+    private static final String URL = "jdbc:postgresql://localhost:5432/LoL?user=postgres&password=1234";
 
     public static int login(String user, String password){
         try {

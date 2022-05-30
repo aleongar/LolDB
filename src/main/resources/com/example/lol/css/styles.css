@@ -115,3 +115,21 @@
     -fx-background-image: url("../images/players-background.jpg");
     -fx-background-size: contain;
 }
+
+.list-cell{
+    -fx-background-color: #091540;
+    -fx-text-fill: #ffc107;
+}
+
+.list-cell:even{
+    -fx-background-color: #0e2163;
+}
+
+.list-cell:filled:selected:focused{
+    -fx-background-color: #17a2b8;
+}
+
+.background-teams{
+    -fx-background-image: url("../images/teams-background.jpg");
+    -fx-background-size: contain;
+}
