@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-
 
 <AnchorPane maxHeight="600.0" maxWidth="800.0" minHeight="430.0" minWidth="600.0" prefHeight="430.0" prefWidth="600.0" styleClass="background-teams" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lol.controllers.TeamController">
    <children>
@@ -47,6 +48,15 @@
                   <Insets top="8.0" />
                </padding>
             </TextField>
+            <Button fx:id="modifyButton" mnemonicParsing="false" onAction="#modifyTeam" text="Modificar" visible="false">
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-dark" />
+               </styleClass>
+            </Button>
          </children>
       </VBox>
    </children>

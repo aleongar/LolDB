@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class DDBB {
     private static Connection connection;
     private static Statement query;
-    private static final String URL = "jdbc:postgresql://192.168.1.74:5432/LoL?user=postgres&password=1234";
+    private static final String URL = "jdbc:postgresql://localhost:5432/LoL?user=postgres&password=1234";
 
     public static int login(String user, String password){
         try {
@@ -366,5 +366,77 @@ public class DDBB {
             }
         }
         return equipo;
+    }
+
+    public static void deleteTeam(String name, String shortName, String nation){
+        try {
+            System.out.println("Si lees esto, es porque se está eliminando un equipo");
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL);
+            query = connection.createStatement();
+            String sql  = "DELETE FROM equipos WHERE id = '" + shortName +
+                    "' AND nombre = '" + name + "'AND nacion = '" + nation + "'" ;
+            query.execute(sql);
+        } catch (SQLException e) {
+            System.err.println("No se han podido obtener datos");
+            System.err.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.err.println("No se ha podido establecer la conexion");
+        }
+        finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                System.err.println("No se ha podido cerrar la conexion");
+            }
+        }
+    }
+
+    public static void addTeam(String name, String shortName, String nation){
+        try {
+            System.out.println("Si lees esto, es porque se está insertando un equipo");
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL);
+            query = connection.createStatement();
+            String sql  = "INSERT INTO equipos (id, nombre, nacion) values ('" +shortName + "', '" +
+                    name + "', '" + nation + "')";
+            query.execute(sql);
+        } catch (SQLException e) {
+            System.err.println("No se han podido obtener datos");
+            System.err.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.err.println("No se ha podido establecer la conexion");
+        }
+        finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                System.err.println("No se ha podido cerrar la conexion");
+            }
+        }
+    }
+
+    public static void updateTeam(String id, String nombre, String nacion){
+        try {
+            System.out.println("Si lees esto, es porque se está actualizando un equipo");
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL);
+            query = connection.createStatement();
+            String sql  = "UPDATE equipos SET nombre = '" + nombre +
+                    "', nacion = '" + nacion + "' WHERE id = '" + id + "'";
+            query.execute(sql);
+        } catch (SQLException e) {
+            System.err.println("No se han podido obtener datos");
+            System.err.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.err.println("No se ha podido establecer la conexion");
+        }
+        finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                System.err.println("No se ha podido cerrar la conexion");
+            }
+        }
     }
 }

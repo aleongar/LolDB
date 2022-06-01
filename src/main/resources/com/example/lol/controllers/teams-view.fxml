@@ -16,6 +16,15 @@
       </HBox>
       <HBox alignment="TOP_CENTER" layoutY="444.0" maxHeight="150.0" maxWidth="800.0" minHeight="150.0" minWidth="800.0" prefHeight="150.0" prefWidth="800.0">
          <children>
+            <Button fx:id="viewButton" disable="true" mnemonicParsing="false" onAction="#viewTeam" text="Visualizar">
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-dark" />
+               </styleClass>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Button>
             <Button fx:id="addButton" mnemonicParsing="false" onAction="#addTeam" text="Añadir" visible="false">
                <HBox.margin>
                   <Insets right="10.0" />
