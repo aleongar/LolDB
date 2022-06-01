@@ -1,5 +1,6 @@
 package com.example.lol.bussiness;
 import com.example.lol.models.PlayerModel;
+import com.example.lol.models.TeamModel;
 import com.example.lol.models.UserModel;
 
 import javax.xml.transform.Result;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 public class DDBB {
     private static Connection connection;
     private static Statement query;
-    private static final String URL = "jdbc:postgresql://localhost:5432/LoL?user=postgres&password=1234";
+    private static final String URL = "jdbc:postgresql://192.168.1.74:5432/LoL?user=postgres&password=1234";
 
     public static int login(String user, String password){
         try {
@@ -336,5 +337,34 @@ public class DDBB {
                 System.err.println("No se ha podido cerrar la conexion");
             }
         }
+    }
+
+    public static ArrayList<TeamModel> getTeams(){
+        ArrayList<TeamModel> equipo = new ArrayList<>();
+        try {
+            System.out.println("se están cargando los equipos");
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL);
+            query = connection.createStatement();
+            String sql  = "SELECT * FROM equipos";
+            ResultSet result = query.executeQuery(sql);
+            while(result.next()){
+                equipo.add(new TeamModel(result.getString(1),
+                        result.getString(2), result.getString(3)));
+            }
+        } catch (SQLException e) {
+            System.err.println("No se han podido obtener datos");
+            System.err.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.err.println("No se ha podido establecer la conexion");
+        }
+        finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                System.err.println("No se ha podido cerrar la conexion");
+            }
+        }
+        return equipo;
     }
 }

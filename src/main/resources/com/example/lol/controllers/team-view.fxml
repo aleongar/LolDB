@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane maxHeight="600.0" maxWidth="800.0" minHeight="430.0" minWidth="600.0" prefHeight="430.0" prefWidth="600.0" styleClass="background-teams" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lol.controllers.TeamController">
+   <children>
+      <VBox alignment="CENTER" fillWidth="false" maxHeight="430.0" maxWidth="600.0" minHeight="430.0" minWidth="600.0" prefHeight="430.0" prefWidth="600.0">
+         <children>
+            <Label styleClass="login-label" text="Nombre">
+               <padding>
+                  <Insets bottom="4.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="nameTextField" editable="false" prefHeight="25.0" prefWidth="195.0" styleClass="login-fields">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets top="8.0" />
+               </padding>
+            </TextField>
+            <Label styleClass="login-label" text="Nombre Abreviado">
+               <padding>
+                  <Insets bottom="4.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="shortNameTextField" editable="false" prefHeight="25.0" prefWidth="195.0" styleClass="login-fields">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets top="8.0" />
+               </padding>
+            </TextField>
+            <Label styleClass="login-label" text="Nacionalidad">
+               <padding>
+                  <Insets bottom="4.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="nationTextField" editable="false" prefHeight="25.0" prefWidth="195.0" styleClass="login-fields">
+               <padding>
+                  <Insets top="8.0" />
+               </padding>
+            </TextField>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

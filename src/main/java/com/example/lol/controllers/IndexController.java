@@ -19,6 +19,7 @@ public class IndexController {
     private UserModel user;
     private Stage actualStage;
     private Stage championsStage;
+    private Stage teamsStage;
     private Stage playerStage;
 
     public void initialize(UserModel user, Stage actualStage){
@@ -27,6 +28,7 @@ public class IndexController {
         this.actualStage = actualStage;
         championsStage = new Stage();
         playerStage = new Stage();
+        teamsStage = new Stage();
     }
 
     private String makeUser(String name, int id){
@@ -73,6 +75,20 @@ public class IndexController {
     @FXML
     protected void openTeamsView(){
         System.out.println("No sé que decir sobre los equipos, la verdad");
+        FXMLLoader fxmlLoader = new FXMLLoader(TeamsController.class.getResource("teams-view.fxml"));
+        Scene scene;
+        try {
+            scene = new Scene(fxmlLoader.load());
+            ((TeamsController)fxmlLoader.getController()).initialize(user.isAdmin());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        teamsStage.setTitle("Teams");
+        teamsStage.setScene(scene);
+        if(!teamsStage.isShowing())
+            teamsStage.show();
+        teamsStage.setIconified(false);
+        teamsStage.requestFocus();
     }
 
     @FXML
@@ -101,6 +117,7 @@ public class IndexController {
         stage.requestFocus();
         championsStage.close();
         playerStage.close();
+        teamsStage.close();
         actualStage.close();
     }
 }
