@@ -19,17 +19,17 @@ public class TeamsController {
     private Stage teamStage;
     private int index;
 
-    public void initialize(boolean admin){
+    public void initialize(boolean admin) {
         this.admin = admin;
         getTeamsFromDB();
         addButton.setVisible(admin);
         deleteButton.setVisible(admin);
     }
 
-    private void getTeamsFromDB(){
+    private void getTeamsFromDB() {
         teamsListView.getItems().clear();
         teams = DDBB.getTeams();
-        for(TeamModel team : teams){
+        for (TeamModel team : teams) {
             teamsListView.getItems().add(team.getNombre());
         }
     }
@@ -47,7 +47,7 @@ public class TeamsController {
     private Button deleteButton;
 
     @FXML
-    protected void addTeam(){
+    protected void addTeam() {
         System.out.println("Adding");
         teamStage = new Stage();
         Scene scene;
@@ -68,7 +68,7 @@ public class TeamsController {
     }
 
     @FXML
-    protected void removeTeam(){
+    protected void removeTeam() {
         System.out.println("Removing");
         TeamModel selectedTeam = teams.get(index);
         DDBB.deleteTeam(selectedTeam.getNombre(), selectedTeam.getId(), selectedTeam.getNacion());
@@ -76,7 +76,7 @@ public class TeamsController {
     }
 
     @FXML
-    protected void viewTeam(){
+    protected void viewTeam() {
         teamStage = new Stage();
         Scene scene;
         try {
@@ -98,37 +98,33 @@ public class TeamsController {
 
     @FXML
     protected void selectTeam() {
-        if (teamsListView.getSelectionModel().getSelectedItem() != null) {
-            index = teamsListView.getSelectionModel().getSelectedIndex();
-            viewButton.setDisable(false);
-            deleteButton.setDisable(false);
-            teamsListView.setOnMouseClicked((mouseEvent) -> {
-                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    viewButton.setDisable(false);
-                    deleteButton.setDisable(false);
-                    if (mouseEvent.getClickCount() == 2) {
-                        teamStage = new Stage();
-                        Scene scene;
-                        try {
-                            FXMLLoader fxmlLoader = new FXMLLoader(TeamController.class.getResource("team-view.fxml"));
-                            scene = new Scene(fxmlLoader.load());
-                            ((TeamController) fxmlLoader.getController())
-                                    .initialize(teams.get(teamsListView.getSelectionModel().getSelectedIndex()), admin, teamStage);
-                            teamStage.setScene(scene);
-                            teamStage.show();
-                            teamStage.setOnHidden((windowEvent) -> {
-                                viewButton.setDisable(true);
-                                getTeamsFromDB();
-                            });
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+        teamsListView.setOnMouseClicked((mouseEvent) -> {
+            if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && teamsListView.getSelectionModel().getSelectedItem() != null) {
+                index = teamsListView.getSelectionModel().getSelectedIndex();
+                viewButton.setDisable(false);
+                deleteButton.setDisable(false);
+                if (mouseEvent.getClickCount() == 2) {
+                    teamStage = new Stage();
+                    Scene scene;
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(TeamController.class.getResource("team-view.fxml"));
+                        scene = new Scene(fxmlLoader.load());
+                        ((TeamController) fxmlLoader.getController())
+                                .initialize(teams.get(teamsListView.getSelectionModel().getSelectedIndex()),
+                                        admin, teamStage);
+                        teamStage.setScene(scene);
+                        teamStage.show();
+                        teamStage.setOnHidden((windowEvent) -> {
+                            viewButton.setDisable(true);
+                            getTeamsFromDB();
+                        });
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
-                } else {
-                    System.out.println("No has seleccionado un equipo");
                 }
-            });
-        }
+            } else {
+                System.out.println("No has seleccionado un equipo");
+            }
+        });
     }
-
 }
