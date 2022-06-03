@@ -181,6 +181,7 @@ public class PlayersController {
         cancelButton.setDisable(true);
         cancelButton.setVisible(false);
         newPlayerButton.setDisable(false);
+        deleteButton.setDisable(true);
         players = DDBB.getNewerPlayersView();
         playersListView.setDisable(false);
         updatePlayers();
@@ -197,6 +198,7 @@ public class PlayersController {
         cancelButton.setVisible(false);
         newPlayerButton.setDisable(false);
         playersListView.setDisable(false);
+        deleteButton.setDisable(false);
         clearInputs();
     }
 

@@ -212,8 +212,35 @@ public class ChampionsController {
 
     @FXML
     private void insertChamp(){
-        DDBB.insertChamp(nameTextField.getText(), abQTextField.getText(), abWTextField.getText(),
-                abETextField.getText(), abRTextField.getText(), dmgTextField.getText());
+        try {
+            DDBB.insertChamp(nameTextField.getText(), abQTextField.getText(), abWTextField.getText(),
+                    abETextField.getText(), abRTextField.getText(), dmgTextField.getText());
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            try {
+                result.first();
+                result.setFetchDirection(ResultSet.FETCH_FORWARD);
+                nextButton.setDisable(false);
+                prevButton.setDisable(true);
+                newButton.setDisable(false);
+                insertButton.setVisible(false);
+                cancelButton.setVisible(false);
+                changeEdition(false);
+                champ = new ChampionModel(result.getString(1),
+                        result.getString(2), result.getString(3));
+                oldChamp = new ChampionModel(result.getString(1),
+                        result.getString(2), result.getString(3));
+                nameTextField.setText(champ.getName());
+                dmgTextField.setText(champ.getDano());
+                abQTextField.setText(champ.getHabilidades()[0]);
+                abWTextField.setText(champ.getHabilidades()[1]);
+                abETextField.setText(champ.getHabilidades()[2]);
+                abRTextField.setText(champ.getHabilidades()[3]);
+                return;
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
         newButton.setDisable(false);
         insertButton.setVisible(false);
         cancelButton.setVisible(false);
