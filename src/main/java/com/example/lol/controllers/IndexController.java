@@ -92,11 +92,6 @@ public class IndexController {
     }
 
     @FXML
-    protected void openItemsView(){
-        System.out.println("Sinceramente me parecen una mierda los de ahora pero tengo que vivir con ello");
-    }
-
-    @FXML
     protected void signOut(){
         System.out.println("Cerrando sesión");
         FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("login-view.fxml"));

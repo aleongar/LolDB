@@ -56,7 +56,7 @@
                   <Insets right="100.0" />
                </opaqueInsets>
                <HBox.margin>
-                  <Insets right="100.0" />
+                  <Insets />
                </HBox.margin>
                <styleClass>
                   <String fx:value="button-menu" />
@@ -64,22 +64,6 @@
                </styleClass>
                <children>
                   <Label alignment="CENTER" styleClass="index-label" text="Equipos">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" maxHeight="250.0" maxWidth="250.0" minHeight="200.0" minWidth="250.0" onMouseClicked="#openItemsView" prefHeight="200.0" prefWidth="250.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <styleClass>
-                  <String fx:value="button-menu" />
-                  <String fx:value="button-items" />
-               </styleClass>
-               <children>
-                  <Label alignment="CENTER" styleClass="index-label" text="Objetos">
                      <font>
                         <Font size="20.0" />
                      </font>
