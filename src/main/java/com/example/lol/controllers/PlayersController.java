@@ -1,6 +1,6 @@
 package com.example.lol.controllers;
 
-import com.example.lol.bussiness.DDBB;
+import com.example.lol.services.DBService;
 import com.example.lol.models.PlayerModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -49,7 +49,7 @@ public class PlayersController {
     private TextField masteryTextField;
 
     @FXML
-    private ListView playersListView;
+    private ListView<String> playersListView;
 
     @FXML
     private Label warningLabel;
@@ -65,7 +65,7 @@ public class PlayersController {
         this.admin = admin;
         lastVerView = false;
         adding = false;
-        players = DDBB.getNewerPlayersView();
+        players = DBService.getNewerPlayersView();
         updatePlayers();
         if(admin) {
             newPlayerButton.setVisible(true);
@@ -126,14 +126,14 @@ public class PlayersController {
         System.out.println("version change");
         clearInputs();
         if(lastVerView) {
-            players = DDBB.getNewerPlayersView();
+            players = DBService.getNewerPlayersView();
             versionButton.setText("Versión Anterior");
             lastVerView = false;
             updatePlayers();
             newPlayerButton.setDisable(false);
         }
         else {
-            players = DDBB.getOlderPlayer();
+            players = DBService.getOlderPlayer();
             versionButton.setText("Versión Actual");
             lastVerView = true;
             updatePlayers();
@@ -163,7 +163,7 @@ public class PlayersController {
     @FXML
     protected void addPlayer(){
         String result;
-        result = DDBB.insertPlayer(nameTextField.getText(), surnameTextField.getText(),
+        result = DBService.insertPlayer(nameTextField.getText(), surnameTextField.getText(),
                 playernameTextField.getText(), teamTextField.getText(), masteryTextField.getText(),
                 bestchampTextField.getText());
         if(result.compareTo("Jugador añadido") == 0){
@@ -182,7 +182,7 @@ public class PlayersController {
         cancelButton.setVisible(false);
         newPlayerButton.setDisable(false);
         deleteButton.setDisable(true);
-        players = DDBB.getNewerPlayersView();
+        players = DBService.getNewerPlayersView();
         playersListView.setDisable(false);
         updatePlayers();
     }
@@ -205,8 +205,8 @@ public class PlayersController {
     @FXML
     protected void deletePlayer(){
         System.out.println("delete");
-        DDBB.deletePlayer(playernameTextField.getText());
-        players = DDBB.getNewerPlayersView();
+        DBService.deletePlayer(playernameTextField.getText());
+        players = DBService.getNewerPlayersView();
         updatePlayers();
     }
 }

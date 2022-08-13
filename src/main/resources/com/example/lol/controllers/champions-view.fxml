@@ -32,15 +32,15 @@
                            <children>
                               <CheckBox fx:id="editionCheck" mnemonicParsing="false" onAction="#enableEditionAbility" text="Habilitar edición" visible="false">
                                  <styleClass>
-                                    <String fx:value="btn" />
-                                    <String fx:value="btn-dark" />
+                                    <String fx:value="login-check-box" />
+                                    <String fx:value="login-label" />
                                  </styleClass>
                               </CheckBox>
                            </children>
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox maxHeight="375.0" maxWidth="266.0" minHeight="375.0" minWidth="266.0" prefHeight="375.0" prefWidth="266.0">
+                  <VBox alignment="CENTER" maxHeight="375.0" maxWidth="266.0" minHeight="375.0" minWidth="266.0" prefHeight="375.0" prefWidth="266.0">
                      <children>
                         <ImageView fx:id="championImage" fitHeight="378.0" fitWidth="266.0" pickOnBounds="true" preserveRatio="true" styleClass="image-border" />
                      </children>

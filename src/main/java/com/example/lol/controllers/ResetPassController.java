@@ -1,6 +1,6 @@
 package com.example.lol.controllers;
 
-import com.example.lol.bussiness.DDBB;
+import com.example.lol.services.DBService;
 import com.example.lol.models.UserModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -26,14 +26,15 @@ public class ResetPassController {
 
      @FXML
      protected void changePassword(){
-          if(DDBB.checkUser(userTextField.getText(), idTextField.getText()) == 0){
+          if(DBService.checkUser(userTextField.getText(), idTextField.getText()) == DBService.NULL_ID){
                warningLabel.setText("No existe un usuario con ese id");
-          } else if (passTextField.getText().compareTo(repeatTextField.getText()) != 0) {
-               warningLabel.setText("Las contraseñas no coinciden");
-          } else {
-               DDBB.updatePassword(userTextField.getText(), idTextField.getText(), UserModel.hash(passTextField.getText()));
-               System.out.println(UserModel.hash(passTextField.getText()));
+               return;
           }
+          if (passTextField.getText().compareTo(repeatTextField.getText()) != 0) {
+               warningLabel.setText("Las contraseñas no coinciden");
+               return;
+          }
+          DBService.updatePassword(userTextField.getText(), idTextField.getText(), UserModel.hash(passTextField.getText()));
+          System.out.println(UserModel.hash(passTextField.getText()));
      }
-
 }

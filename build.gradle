@@ -16,9 +16,6 @@ ext {
     junitVersion = '5.8.2'
 }
 
-sourceCompatibility = '16'
-targetCompatibility = '16'
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -34,7 +31,8 @@ javafx {
 }
 
 dependencies {
-    implementation("org.postgresql:postgresql:42.3.4")
+    implementation('org.postgresql:postgresql:42.3.6')
+    implementation('org.json:json:20220320')
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

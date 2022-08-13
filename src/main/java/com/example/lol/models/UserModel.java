@@ -5,6 +5,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.example.lol.services.DBService;
+import org.json.JSONObject;
+
+
 public class UserModel {
     private int id;
     private String username;
@@ -16,6 +20,16 @@ public class UserModel {
         this.username = username;
         this.password = password;
         this.admin = admin;
+    }
+
+    public UserModel(JSONObject jsonUser) throws UserDoesNotExistException {
+        if(DBService.checkUser(jsonUser.getString("username"), Integer.toString(jsonUser.getInt("id")),
+                jsonUser.getBoolean("admin"), jsonUser.getString("password")) == DBService.NULL_ID)
+            throw new UserDoesNotExistException();
+        this.id = jsonUser.getInt("id");
+        this.username = jsonUser.getString("username");
+        this.password = jsonUser.getString("password");
+        this.admin = jsonUser.getBoolean("admin");
     }
 
     public int getId() {
@@ -50,6 +64,7 @@ public class UserModel {
         this.admin = admin;
     }
 
+    //this and the below method obtained from: https://www.geeksforgeeks.org/sha-256-hash-in-java/
     private static byte[] getBytes(String input) throws NoSuchAlgorithmException{
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         return md.digest(input.getBytes(StandardCharsets.UTF_8));
@@ -63,16 +78,19 @@ public class UserModel {
             throw new RuntimeException(e);
         }
         BigInteger number = new BigInteger(1, hash);
-
-        // Convert message digest into hex value
         StringBuilder hexString = new StringBuilder(number.toString(16));
-
-        // Pad with leading zeros
         while (hexString.length() < 64)
-        {
             hexString.insert(0, '0');
-        }
 
         return hexString.toString();
+    }
+
+    public String json(){
+        JSONObject user = new JSONObject();
+        user.put("id", id);
+        user.put("username", username);
+        user.put("password", password);
+        user.put("admin", admin);
+        return user.toString();
     }
 }

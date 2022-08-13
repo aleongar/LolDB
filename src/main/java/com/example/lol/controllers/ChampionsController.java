@@ -1,15 +1,22 @@
 package com.example.lol.controllers;
 
-import com.example.lol.bussiness.DDBB;
+import com.example.lol.HelloApplication;
+import com.example.lol.services.DBService;
 import com.example.lol.models.ChampionModel;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public class ChampionsController {
     @FXML
@@ -57,12 +64,14 @@ public class ChampionsController {
     private ChampionModel oldChamp;
     private int rows;
     private boolean admin;
+    private HashMap<String, Image> imagesMap;
 
 
     public void initialize(ResultSet result, boolean admin){
         this.result = result;
         this.admin = admin;
         editing = false;
+        initImageHashMap();
         try {
             result.next();
             champ = new ChampionModel(result.getString(1),
@@ -77,14 +86,10 @@ public class ChampionsController {
             System.err.println("La consulta no devolvió nada");
             throw new RuntimeException(e);
         }
-        nameTextField.setText(champ.getName());
-        dmgTextField.setText(champ.getDano());
-        abQTextField.setText(champ.getHabilidades()[0]);
-        abWTextField.setText(champ.getHabilidades()[1]);
-        abETextField.setText(champ.getHabilidades()[2]);
-        abRTextField.setText(champ.getHabilidades()[3]);
-        rows = DDBB.getChampionsCount();
+        setChampionsTextFields();
+        rows = DBService.getChampionsCount();
         prevButton.setDisable(true);
+        championImage.setImage(getImageFromMap());
     }
 
     @FXML
@@ -135,12 +140,8 @@ public class ChampionsController {
             }
         }
         editing = false;
-        nameTextField.setText(champ.getName());
-        dmgTextField.setText(champ.getDano());
-        abQTextField.setText(champ.getHabilidades()[0]);
-        abWTextField.setText(champ.getHabilidades()[1]);
-        abETextField.setText(champ.getHabilidades()[2]);
-        abRTextField.setText(champ.getHabilidades()[3]);
+        setChampionsTextFields();
+        championImage.setImage(getImageFromMap());
     }
 
     @FXML
@@ -164,12 +165,8 @@ public class ChampionsController {
             }
         }
         editing = false;
-        nameTextField.setText(champ.getName());
-        dmgTextField.setText(champ.getDano());
-        abQTextField.setText(champ.getHabilidades()[0]);
-        abWTextField.setText(champ.getHabilidades()[1]);
-        abETextField.setText(champ.getHabilidades()[2]);
-        abRTextField.setText(champ.getHabilidades()[3]);
+        setChampionsTextFields();
+        championImage.setImage(getImageFromMap());
     }
 
     private void checkModifed(){
@@ -177,10 +174,10 @@ public class ChampionsController {
                 abWTextField.getText().compareTo(oldChamp.getHabilidades()[1]) != 0 ||
                 abETextField.getText().compareTo(oldChamp.getHabilidades()[2]) != 0 ||
                 abRTextField.getText().compareTo(oldChamp.getHabilidades()[3]) != 0 ){
-            DDBB.updateChamps(abQTextField.getText(), abWTextField.getText(),
+            DBService.updateChamps(abQTextField.getText(), abWTextField.getText(),
                     abETextField.getText(), abRTextField.getText(), nameTextField.getText());
             try {
-               result = DDBB.getChampionQuery();
+               result = DBService.getChampionQuery();
                result.last();
                nextButton.setDisable(true);
                prevButton.setDisable(false);
@@ -189,12 +186,8 @@ public class ChampionsController {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            nameTextField.setText(champ.getName());
-            dmgTextField.setText(champ.getDano());
-            abQTextField.setText(champ.getHabilidades()[0]);
-            abWTextField.setText(champ.getHabilidades()[1]);
-            abETextField.setText(champ.getHabilidades()[2]);
-            abRTextField.setText(champ.getHabilidades()[3]);
+            setChampionsTextFields();
+            championImage.setImage(imagesMap.get(nameTextField.getText()));
         }
     }
     @FXML
@@ -208,12 +201,13 @@ public class ChampionsController {
         nextButton.setDisable(true);
         editionCheck.setSelected(false);
         editionCheck.setDisable(true);
+        championImage.setImage(null);
     }
 
     @FXML
     private void insertChamp(){
         try {
-            DDBB.insertChamp(nameTextField.getText(), abQTextField.getText(), abWTextField.getText(),
+            DBService.insertChamp(nameTextField.getText(), abQTextField.getText(), abWTextField.getText(),
                     abETextField.getText(), abRTextField.getText(), dmgTextField.getText());
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -225,17 +219,14 @@ public class ChampionsController {
                 newButton.setDisable(false);
                 insertButton.setVisible(false);
                 cancelButton.setVisible(false);
+                editionCheck.setDisable(false);
                 changeEdition(false);
                 champ = new ChampionModel(result.getString(1),
                         result.getString(2), result.getString(3));
                 oldChamp = new ChampionModel(result.getString(1),
                         result.getString(2), result.getString(3));
-                nameTextField.setText(champ.getName());
-                dmgTextField.setText(champ.getDano());
-                abQTextField.setText(champ.getHabilidades()[0]);
-                abWTextField.setText(champ.getHabilidades()[1]);
-                abETextField.setText(champ.getHabilidades()[2]);
-                abRTextField.setText(champ.getHabilidades()[3]);
+                setChampionsTextFields();
+                championImage.setImage(getImageFromMap());
                 return;
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
@@ -246,13 +237,13 @@ public class ChampionsController {
         cancelButton.setVisible(false);
         changeEdition(false);
         try {
-            result = DDBB.getChampionQuery();
+            result = DBService.getChampionQuery();
             result.last();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         prevButton.setDisable(false);
-        rows = DDBB.getChampionsCount();
+        rows = DBService.getChampionsCount();
     }
 
     @FXML
@@ -272,12 +263,36 @@ public class ChampionsController {
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
+        setChampionsTextFields();
+        championImage.setImage(getImageFromMap());
+        prevButton.setDisable(true);
+    }
+
+    private void setChampionsTextFields() {
         nameTextField.setText(champ.getName());
-        dmgTextField.setText(champ.getDano());
+        dmgTextField.setText(champ.getDagno());
         abQTextField.setText(champ.getHabilidades()[0]);
         abWTextField.setText(champ.getHabilidades()[1]);
         abETextField.setText(champ.getHabilidades()[2]);
         abRTextField.setText(champ.getHabilidades()[3]);
-        prevButton.setDisable(true);
     }
+
+    private void initImageHashMap(){
+        imagesMap = new HashMap<>();
+        imagesMap.put("Akali", new Image(HelloApplication.class.getResource("images/champions-images/Akali.jpg").toString()));
+        imagesMap.put("Ryze", new Image(HelloApplication.class.getResource("images/champions-images/Ryze.jpg").toString()));
+        imagesMap.put("Lee Sin", new Image(HelloApplication.class.getResource("images/champions-images/Lee Sin.jpg").toString()));
+        imagesMap.put("Irelia", new Image(HelloApplication.class.getResource("images/champions-images/Irelia.jpg").toString()));
+        imagesMap.put("Ezreal", new Image(HelloApplication.class.getResource("images/champions-images/Ezreal.jpg").toString()));
+        imagesMap.put("Zeri", new Image(HelloApplication.class.getResource("images/champions-images/Zeri.jpg").toString()));
+        imagesMap.put("Ahri", new Image(HelloApplication.class.getResource("images/champions-images/Ahri.jpg").toString()));
+        imagesMap.put("Uknown",new Image(HelloApplication.class.getResource("images/champions-images/uknown.jpg").toString()));
+    }
+
+    private Image getImageFromMap() {
+        if (imagesMap.containsKey(nameTextField.getText()))
+            return imagesMap.get(nameTextField.getText());
+        return imagesMap.get("Uknown");
+    }
+
 }

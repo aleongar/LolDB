@@ -1,6 +1,6 @@
 package com.example.lol.controllers;
 
-import com.example.lol.bussiness.DDBB;
+import com.example.lol.services.DBService;
 import com.example.lol.models.TeamModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -45,10 +45,11 @@ public class TeamController {
     protected void modifyTeam(){
         System.out.println("Boton modificar");
         if(modifyButton.getText().compareTo("Añadir") == 0){
-            DDBB.addTeam(nameTextField.getText(), shortNameTextField.getText(), nationTextField.getText());
+            DBService.addTeam(nameTextField.getText(), shortNameTextField.getText(), nationTextField.getText());
             thisStage.close();
-        }else{
-            DDBB.updateTeam(shortNameTextField.getText(), nameTextField.getText(), nationTextField.getText());
+        }
+        if(modifyButton.getText().compareTo("Modificar") == 0){
+            DBService.updateTeam(shortNameTextField.getText(), nameTextField.getText(), nationTextField.getText());
             thisStage.close();
         }
     }

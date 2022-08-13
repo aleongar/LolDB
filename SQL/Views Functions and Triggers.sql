@@ -3,22 +3,23 @@
 
 CREATE MATERIALIZED VIEW info_jugadores_maestria
 as
-SELECT last_version() as version, j.apodo, d.campeon, d.maestria FROM jugadores j, dominar d WHERE j.apodo = d.jugador ORDER BY apodo
+SELECT last_version() as ultima_version, j.apodo, d.campeon, d.maestria FROM jugadores j, dominar d WHERE j.apodo = d.jugador ORDER BY apodo;
+
 
 --Vistas 2
 --Vista materializada con la información de los campeones (nombre, habilidades)
 
 CREATE VIEW campeones_habilidades
 as
-SELECT c.nombre ,h.* FROM campeones c, separar_habilidades() h WHERE c.habilidades like concat(h.habilidad_q, ', %')
+SELECT c.nombre ,h.* FROM campeones c, separar_habilidades() h WHERE c.habilidades like concat(h.habilidad_q, ', %');
 
 --Para probar estas vistas he realizado un par de inserts
 INSERT INTO campeones
 VALUES
-('Zeri', 'Fuego Explosivo, Ultradescarga Láser, Subida de Tensión, Choque de Rayos', 'Físico')
+('Zeri', 'Fuego Explosivo, Ultradescarga Láser, Subida de Tensión, Choque de Rayos', 'Físico');
 INSERT INTO DOMINAR
 VALUES
-('Lwx', 'Zeri', 1531100)
+('Lwx', 'Zeri', 1531100);
 
 ------------------------------------------------------
 
@@ -176,10 +177,10 @@ BEGIN
              SELECT 0, ' ' into maestria_R, campeon_R;
              RETURN NEXT;
 END;
-$$ language plpgsql
+$$ language plpgsql;
 
 --Ejemplo
-SELECT * FROM obtener_mejor_campeon('Faker')
+SELECT * FROM obtener_mejor_campeon('Faker');
 
 -----------------------------------
 
@@ -201,7 +202,7 @@ CREATE TRIGGER insertar_maestria_trigger
 BEFORE INSERT OR UPDATE of maestria
 ON dominar
 FOR EACH ROW
-EXECUTE PROCEDURE insertar_maestria()
+EXECUTE PROCEDURE insertar_maestria();
 
 --Test incorrecto insert
 INSERT INTO dominar

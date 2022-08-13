@@ -1,6 +1,6 @@
 package com.example.lol.controllers;
 
-import com.example.lol.bussiness.DDBB;
+import com.example.lol.services.DBService;
 import com.example.lol.models.TeamModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,23 +19,8 @@ public class TeamsController {
     private Stage teamStage;
     private int index;
 
-    public void initialize(boolean admin) {
-        this.admin = admin;
-        getTeamsFromDB();
-        addButton.setVisible(admin);
-        deleteButton.setVisible(admin);
-    }
-
-    private void getTeamsFromDB() {
-        teamsListView.getItems().clear();
-        teams = DDBB.getTeams();
-        for (TeamModel team : teams) {
-            teamsListView.getItems().add(team.getNombre());
-        }
-    }
-
     @FXML
-    private ListView teamsListView;
+    private ListView<String> teamsListView;
 
     @FXML
     private Button viewButton;
@@ -46,6 +31,21 @@ public class TeamsController {
     @FXML
     private Button deleteButton;
 
+    public void initialize(boolean admin) {
+        this.admin = admin;
+        getTeamsFromDB();
+        addButton.setVisible(admin);
+        deleteButton.setVisible(admin);
+    }
+
+    private void getTeamsFromDB() {
+        teamsListView.getItems().clear();
+        teams = DBService.getTeams();
+        for (TeamModel team : teams) {
+            teamsListView.getItems().add(team.getNombre());
+        }
+    }
+
     @FXML
     protected void addTeam() {
         System.out.println("Adding");
@@ -54,14 +54,11 @@ public class TeamsController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(TeamController.class.getResource("team-view.fxml"));
             scene = new Scene(fxmlLoader.load());
-            ((TeamController) fxmlLoader.getController())
-                    .initialize(true, teamStage);
+            ((TeamController) fxmlLoader.getController()).initialize(true, teamStage);
             teamStage.setScene(scene);
             teamStage.show();
             viewButton.setDisable(true);
-            teamStage.setOnHidden((windowEvent) -> {
-                getTeamsFromDB();
-            });
+            teamStage.setOnHidden((windowEvent) -> getTeamsFromDB());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -71,7 +68,7 @@ public class TeamsController {
     protected void removeTeam() {
         System.out.println("Removing");
         TeamModel selectedTeam = teams.get(index);
-        DDBB.deleteTeam(selectedTeam.getNombre(), selectedTeam.getId(), selectedTeam.getNacion());
+        DBService.deleteTeam(selectedTeam.getNombre(), selectedTeam.getId(), selectedTeam.getNacion());
         getTeamsFromDB();
     }
 
@@ -87,9 +84,7 @@ public class TeamsController {
             teamStage.setScene(scene);
             teamStage.show();
             viewButton.setDisable(true);
-            teamStage.setOnHidden((windowEvent) -> {
-                getTeamsFromDB();
-            });
+            teamStage.setOnHidden((windowEvent) -> getTeamsFromDB());
             teamStage = null;
         } catch (IOException e) {
             throw new RuntimeException(e);

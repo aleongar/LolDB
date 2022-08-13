@@ -1,10 +1,12 @@
 package com.example.lol.controllers;
 
-import com.example.lol.bussiness.DDBB;
+import com.example.lol.services.DBService;
 import com.example.lol.models.UserModel;
+import com.example.lol.services.JSONService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -17,7 +19,6 @@ public class LoginController {
     private Stage actualStage;
     private Stage signUpStage;
     private Stage resetPasswordStage;
-
     public void initialize(){
         signUpStage = new Stage();
         resetPasswordStage = new Stage();
@@ -35,27 +36,33 @@ public class LoginController {
 
     @FXML
     private Label warningLabel;
+    @FXML
+    private CheckBox keepLoged;
 
     @FXML
     protected void signIn(){
-        int id = DDBB.login(userTextField.getText(), UserModel.hash(passTextField.getText()));
-        if(id == 0){
+        int id = DBService.login(userTextField.getText(), UserModel.hash(passTextField.getText()));
+        if(id == DBService.NULL_ID){
             warningLabel.setVisible(true);
-        }else{
-            UserModel user = DDBB.userLogged(userTextField.getText(), UserModel.hash(passTextField.getText()));
-            FXMLLoader fxmlLoader = new FXMLLoader(IndexController.class.getResource("index-view.fxml"));
-            Stage stage = new Stage();
-            try {
-                scene = new Scene(fxmlLoader.load());
-                ((IndexController)fxmlLoader.getController()).initialize(user, stage);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            stage.setTitle("Index");
-            stage.setScene(scene);
-            stage.show();
-            actualStage.close();
+            return;
         }
+        UserModel user = DBService.userLogged(userTextField.getText(), UserModel.hash(passTextField.getText()));
+        assert user != null;
+        if(keepLoged.isSelected())
+            JSONService.createJSONFile(user);
+
+        FXMLLoader fxmlLoader = new FXMLLoader(IndexController.class.getResource("index-view.fxml"));
+        Stage stage = new Stage();
+        try {
+            scene = new Scene(fxmlLoader.load());
+            ((IndexController)fxmlLoader.getController()).initialize(user, stage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        stage.setTitle("Index");
+        stage.setScene(scene);
+        stage.show();
+        actualStage.close();
     }
 
     @FXML

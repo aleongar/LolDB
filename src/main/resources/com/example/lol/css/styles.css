@@ -1,6 +1,7 @@
 .background{
     -fx-background-image: url("../images/background.jpg");
     -fx-background-size: contain;
+    
 }
 
 .login-form{
@@ -44,6 +45,18 @@
     -fx-border-color: #17a2b8;
 }
 
+.login-check-box .box{
+    -fx-background-color: #091540;
+}
+
+.login-check-box:selected .mark{
+    -fx-background-color: #ffc107;
+}
+
+.login-check-box:selected .box{
+    -fx-background-color: #17a2b8;
+}
+
 .button-menu{
     -fx-background-color: #000;
     -fx-border-style: solid;
@@ -56,13 +69,13 @@
     -fx-border-color: rgb(90, 85, 0);
 }
 
+.index-label{
+    -fx-text-fill: transparent ;
+}
+
 .button-champions{
     -fx-background-image: url("../images/champions-button.jpg");
     -fx-background-size: cover;
-}
-
-.index-label{
-    -fx-text-fill: transparent;
 }
 
 .button-champions:hover .index-label{

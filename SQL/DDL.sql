@@ -107,9 +107,9 @@ CREATE TABLE dependen(
 	objeto_requerido numeric(3),
 	cantidad numeric(2),
 	nivel varchar(30),
-	CONSTRAINT PK_dependen PRIMARY KEY (objeto1, objeto2),
-	CONSTRAINT FK_dependen_objeto1 FOREIGN KEY (objeto1) REFERENCES objeto(id) ON UPDATE CASCADE ON DELETE NO ACTION,
-	CONSTRAINT FK_dependen_objeto2 FOREIGN KEY (objeto2) REFERENCES objeto(id) ON UPDATE CASCADE ON DELETE NO ACTION
+	CONSTRAINT PK_dependen PRIMARY KEY (objeto_resultado, objeto_requerido),
+	CONSTRAINT FK_dependen_objeto1 FOREIGN KEY (objeto_resultado) REFERENCES objeto(id) ON UPDATE CASCADE ON DELETE NO ACTION,
+	CONSTRAINT FK_dependen_objeto2 FOREIGN KEY (objeto_requerido) REFERENCES objeto(id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 CREATE TABLE hacerse(

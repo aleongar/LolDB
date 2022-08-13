@@ -3,6 +3,8 @@ module com.example.lol {
     requires javafx.fxml;
     requires java.xml;
     requires java.sql;
+    requires org.json;
+    requires org.postgresql.jdbc;
 
 
     opens com.example.lol to javafx.fxml;
